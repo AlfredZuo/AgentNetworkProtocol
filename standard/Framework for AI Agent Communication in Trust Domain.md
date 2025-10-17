@@ -179,6 +179,20 @@ The definition of Proof shall comply with the specification: [https://www.w3.org
 
 ## 8. Capability Registration——电信撰写，移动参与
 能力注册流程和关键消息、参数
+The registration procedure for an AI Agent in trust domain can refer to steps (A)-(B) in Figure 1. In trust domain scenario, the AI Agents need to register their attributes to a centralized Agent Registration Server, which can be an Agent, a network function, a third-party server, etc. For example, in 6G core network, the Agent Registration Server can evolve and enhance based on the Network Repository Function (NRF), supporting the registration of the traditional network functions and the network Agents. 
+The parameters that an Agent needs to register in a trust domain (step A) may include:
+- Name: The name of the Agent, which may not be unique and typically represented as a string.
+- ID: The global unique ID of the Agent configured by the network operator.
+- Description: Unlike the AD in section 4, the description in the Agent Register information should provide a more concise summary of the Agent’s relevant details based on natural language, typically serving as an abstract of the AD.
+- Address: The access address of the Agent, which might be an URL, FQDN, ICN address, etc.
+- Version: The current version of the Agent, which can be updated in real-time.
+- Capabilities: The capabilities supported by the Agent, including the communication capabilities, interaction modes and multimodal capabilities, etc. The communication capabilities refer to the communication protocols supported by the Agent, such as http/2, http/3, A2A, ANP, MCP, etc. The interaction modes may include request-response and subscription-notification and others. The multimodal capabilities refer to the data modalities that the agent can process, such as text, images, video, etc.
+- Services: The services that the agent can provide. For example, in 6G core network the services may include communication service, AI service, sensing service, computing service, data service, etc. A network Agent may support one or more of these network services.
+- Skills: A list of detailed description of the skills supported by the Agent. The content of each skill include the name, ID, corresponding services, brief abstract, required input, etc. For example, an Agent deployed in 6G core network support skills named “Policy Control” and “User Location Prediction”. Among these, “Policy Control” corresponds to communication service and requires inputs including user policy-related information; “User Location Prediction” corresponds to AI service and requires inputs including user identification and historical location information.
+- Interfaces: The network interfaces that the agent can provide.
+- Security related information: For example, the licenses, authentication credentials, keys of the Agent.
+Then the Agent Registration Server locally sores the registration information of the Agent. Upon successful registration, the Agent Registration Server returns a registration response to the Agent (step B).
+
 
 ## 9. Capability Discovery——移动
 
