@@ -118,7 +118,6 @@ The digital identity mechanism is used for the registration, discovery and commu
 - Communication: one AI agent can communicate with the other AI agent, by sending an initial message with the identifier obtained from the discovered digital identity. The network can use this identifier for addressing and routing the message to the target AI agent. 
 - Authentication: during the communication establishment, both AI agents can use the credentials for the identifier for authentication. Attributes can be negotiated after the authentication.
 - Authorization: compared to human communication, AI agent communication needs to be explicitly authorized at all time. The attribute-based authorization mechanism can support both direct agent-agent authorization and delegated authorization, even for the user authorization.
-
 In order to fulfill the requirements mentioned above, we suggest to introduce the W3C Decentralized Identifier (DID) and Verifiable Credential (VC) standards as the basic digital identity components.
 - DID: The core DID specification does not require implementers to use specific computational infrastructure to build decentralized identifiers, allowing us to fully leverage existing mature technologies and well-established network infrastructure to build DIDs.
 - VC: The VC can be used as container of attributes of an AI agent. The attributes of an AI agent may come from different sources which can be verified by the VC. This will help increase the interoperability of cross-domain communications.
@@ -133,11 +132,16 @@ Leveraging advancements in AI capabilities, the AD document can be entirely desc
 Since different agents may utilize varying models with distinct capabilities, a structured approach is recommended for ensuring consistent and accurate interpretation of the same data across diverse models.
 Structured Format supports multiple document types:
 - JSON (Recommended)
-- JSON-LD
+- JSON-RPC
 - Other structured document formats
 ### 4.2. Agent Information Interaction Mechanism
+The system employs an information interaction mechanism analogous to "web crawlers." Specifically, agents utilize URLs to interconnect externally provided resources (e.g., information, interfaces) through agent description documents, forming a networked ecosystem. Other agents can then operate like crawlers, selectively retrieving appropriate resources to local systems based on the described metadata, where subsequent decision-making and processing occur autonomously.
+Advantages of the Web-Crawler-like Information Interaction Mode：
+- Compatibility with Existing Internet Architecture: Facilitates search engine indexing of agent-publicized information, enabling the creation of an efficient agent data network.
+- Enhanced Privacy Protection: Pulling remote data to local systems for contextual processing mitigates user privacy leakage risks inherent in task-delegation models.
+- Inherent Hierarchical Structure: Supports scalable interactions among a large number of agents.
 Agent description documents include the following two types of resources:
-#### 4.2.1. Information
+#### 4.2.1. Informatica
 Agents may provide the following types of data：
 - Textual files (e.g.： .txt, .csv, .json)
 - Image files (e.g.： .jpg, .png, .svg)
@@ -161,17 +165,63 @@ Security configuration in Agent Description (AD) documents is mandatory. The sec
 To prevent malicious tampering, impersonation, or reuse of Agent Description (AD) documents, a verification mechanism Proof is incorporated into the AD document structure. 
 The definition of Proof shall comply with the specification: [https://www.w3.org/TR/vc-data-integrity/#defn-domain].
 
-## 5. Agent Registration——电信撰写，移动参与(原第8章）,ANP修改
+## 5. Tasks——华为云核，ANP参与
+### 5.1. Overview
+The core function of a task is to enable the AI agents involved in the communication to agree on "what to do", thereby avoiding collaboration failures due to misunderstandings.
+Tasks can be used in capability discovery and communication procedures:
+- Capability Discovery: Obtaining AI agents with matching capabilities based on the task descriptions.
+- Communication: When a Coordinator Agent initiates a communication request to an Execution Agent, the request message may carry a task description. In addition, other auxiliary information such as images, videos, files, can also be sent along with the task description to help accomplish the task.
+Precise task descriptions or task templates are REQUIRED to ensure all agents maintain a consistent understanding of the objectives, operational constraints and criteria.
+A well-defined task description:
+- Reduces ambiguity: Minimizes misinterpretations and conflicting actions among agents.
+- Enables verifiability: Translates abstract goals into executable and measurable plans.
+- Improves robustness: Ensures collaboration remains coherent and efficient under dynamic conditions.
+A task can be executed by an AI agent. When a complex task is received by an AI agent, this task can be broken down into a series of subtasks with a clear execution sequence, known as a task chain, and executed by a group of AI agents. Task chain allows multiple AI agents to execute different tasks in a specific sequence based on policy, and enable multiple AI agents collaboratively to accomplish a complex task. The Agent communication protocol should support to encapsulate the task chain information, e.g., independent with the underlying network transport (e.g., IP, MPLS).
+
+A task is identified by a global unique task ID. The task ID is generated by the agent that creates or assigns the task and are sent along with the task to the agent responsible for executing it.
+### 5.2. Task States
+Upon receiving a task, the Coordinator Agent may decompose it into multiple sub tasks and delegate them to different Execution Agents via dynamic capability discovery mechanism. The AI agent protocol design should support comprehensive state descriptions throughout the task execution lifecycle.
+Based on the length of time to complete the tasks, the task can be categorized into:
+- Short-term tasks: These tasks can be quickly executed and completed, often used for simple tasks such as query the weather.
+- Long-term tasks: These tasks require a longer period of time or involve multi-round interaction or extended waiting periods, such as writing an article. During the execution of long-term tasks, AI agents can synchronize task states or intermediate results among them as needed.
+The Coordinator Agent may dynamically adjust the target of the task according to the intermediate results of the Execution Agents and the context information. The AI agent protocol design should support Long-term and Short-term tasks management.
+The task states are maintained by the execution AI agent, and the task status can be synchronized among Agents as needed. 
+### 5.3. Task coordination
+The task collaboration between AI agents may have different mode:
+- Primary/Secondary mode: a Coordinator Agent decomposes a task into multiple tasks and distributes them to Execution Agents for processing. The Execution Agents return their execution results to the Coordinator Agent, which aggregates the results and delivers them to the end user.
+- Peer negotiation mode: a Coordinator Agent distributes the task of the end user to the Execution Agents, which independently execute their assigned tasks. The Execution Agents return their results directly to the end user via the Coordinator Agent, without requiring further processing by the Coordinator Agent.
+- Subscription mode: a Coordinator Agent may delegate subscription-based tasks to Execution Agents. For example, a task including "book a ticket to Beijing one week before the New Year holiday" will be assigned by the Coordinator Agent which will perform the task at the specified time to the Execution Agents.
+Different tasks may require long and short connections, the AI agent protocol should be able to provide mechanisms beyond simple request/response, including the complex interaction modes for example message multicast, publication/subscription (PUB/SUB), asynchronous notifications.
+The AI Agent protocol design MUST consider support for Agent Communication Server to facilitate task message forwarding.  Agent Communication Server SHOULD prioritize message scheduling and forwarding based on task requirements to ensure efficient agent collaboration and meet transmission QoS objectives.  
+For example, Agent Communication Server MAY implement the following priority hierarchy (from highest to lowest):
+- Control signaling transmission tasks
+- Media stream transmission tasks
+- Training data stream transmission tasks
+This prioritization scheme ensures that critical messages receive preferential treatment during congestion or resource contention scenarios.
+When delegating tasks to Execution Agents, the Coordinator Agent may include task-relevant contextual about the contact information of the end user, the task itself, the historical preference information known by the Coordinator Agent, and other necessary conversation data, to facilitate the task execution. For example, in trip planning case, this may encompass historically booked flight/hotel preferences or dynamically perceived context like recent user dialog. The AI agent protocol should consequently support context sharing mechanisms through standardized definitions of context types, length constraints, and encoding formats to enhance the effectiveness of task execution.
+
+## 6. Communication mode----华为数通
+This section defines the communication mode of AI agents from two dimensions. One dimension is the number of communication participants, which is divided into Point-to-Point Communication (2 AI agents) and Group Communication (3 or more AI agents), and the section is divided into two sub-sections based on this dimension. The other dimension is whether the communication between AI agents requires the participation of an intermediate node, which divides communication into Direct Communication and Indirect Communication, and this dimension is further elaborated in the classification within each sub-section.
+### 6.1. Point-to-Point Communication
+Direct Communication: AI agents directly send and receive protocol messages without the need for intermediate nodes for processing, or AI agents are unaware of these intermediate nodes.
+Indirect Communication: Communication between AI agents requires processing/relaying by the Agent Communication server, and the AI agent must be aware of and interact with the Agent Communication server. The function of the Agent Communication server includes but is not limited to: 
+- AI agent access control (allowing or blocking an AI agent's messages based on its identity or permissions).
+- Application Layer Proxy (to facilitate monitoring/auditing of AI agent communication behavior, or to hide AI agent identity, etc.).
+- Relay (to forward communication messages, making cross-domain communication easier, etc.).
+- Traffic aggregation (to provide a tree-structured traffic regulation, improving communication efficiency).
+- handle authentication and message relaying between the two communicating parties. 
+### 6.2. Group Communication
+To better accomplish communication collaboration, agents can dynamically form groups. Information sent by an agent within a group can be received simultaneously by other agents in the same group.
+### 6.3. PUB/SUB Communication
+In this mode, the AI agent sending the information does not know which AI agents need to receive it. It first Publishes the information to Agent Communication server, and this Agent Communication server then distributes the information to the subscribing Agents based on their Subscribe status. At the application layer, Pub/Sub is a common and efficient method of information distribution, especially suitable for large-scale group communication scenarios.
+
+## 7. Multimodality----华为2012
+Interactions between AI agents must support multimodality，e.g., text, file, document, image, structured data, real-time audio stream, video streaming. The data size of different multimodality as well as the transmission modes (e.g., real-time steaming, or push notification) may be different.
+Given these traffic characteristics above, the Agent communication protocol should support multimodal data transmission which mentioned above. At the same time, the Agent communication protocol and possible protocols of other layers should be designed with the principle that the multimodal data can be distinguished and aware, based on which they can be handled with differentiated policies for better performance assurance and resource efficiency. For example, different multimodal data can be transmitted with different transport streams of different quality guarantee. Or, they can be transmitted within a same transport stream but with different policies (e.g., transmission priority).
+
+## 8. Capability Registration——电信撰写，移动参与
 能力注册流程和关键消息、参数
-Agent Registration Includes the Following Two Modes:‌
-### 5.1. Self-Declaration Mode
-In this mode, intelligent agents interconnect externally provided resources (including information, interfaces, etc.) using Linked-Data technologies, forming a networked ecosystem through agent description documents. Other agents can selectively retrieve appropriate resources via metadata described in these agent profile documents.
-Advantages of the Self-Declaration Mode：
-- Compatibility with Existing Internet Architecture: Facilitates search engine indexing of agent-publicized information, enabling the creation of an efficient agent data network.
-- Enhanced Privacy Protection: Pulling remote data to local systems for contextual processing mitigates user privacy leakage risks inherent in task-delegation models.
-- Inherent Hierarchical Structure: Supports scalable interactions among a large number of agents.
-### 5.2. Centralized Registration Mode‌
-In trust domain scenario, the AI Agents need to register their attributes to a centralized Agent Registration Server, which can be an Agent, a network function, a third-party server, etc. For example, in 6G core network, the Agent Registration Server can evolve and enhance based on the Network Repository Function (NRF), supporting the registration of the traditional network functions and the network Agents. 
+The registration procedure for an AI Agent in trust domain can refer to steps (A)-(B) in Figure 1. In trust domain scenario, the AI Agents need to register their attributes to a centralized Agent Registration Server, which can be an Agent, a network function, a third-party server, etc. For example, in 6G core network, the Agent Registration Server can evolve and enhance based on the Network Repository Function (NRF), supporting the registration of the traditional network functions and the network Agents. 
 The parameters that an Agent needs to register in a trust domain (step A) may include:
 - Name: The name of the Agent, which may not be unique and typically represented as a string.
 - ID: The global unique ID of the Agent configured by the network operator.
@@ -183,84 +233,31 @@ The parameters that an Agent needs to register in a trust domain (step A) may in
 - Skills: A list of detailed description of the skills supported by the Agent. The content of each skill include the name, ID, corresponding services, brief abstract, required input, etc. For example, an Agent deployed in 6G core network support skills named “Policy Control” and “User Location Prediction”. Among these, “Policy Control” corresponds to communication service and requires inputs including user policy-related information; “User Location Prediction” corresponds to AI service and requires inputs including user identification and historical location information.
 - Interfaces: The network interfaces that the agent can provide.
 - Security related information: For example, the licenses, authentication credentials, keys of the Agent.
-Then the Agent Registration Server locally sores the registration information of the Agent. Upon successful registration, the Agent Registration Server returns a registration response to the Agent .
+Then the Agent Registration Server locally sores the registration information of the Agent. Upon successful registration, the Agent Registration Server returns a registration response to the Agent (step B).
 
-## 6. Agent Discovery——移动(原第9章），ANP修改
-Agent Discovery Includes the Following Two Modes:‌ (Corresponding to Agent Registration)‌
-### 6.1. Proactive Discovery Mode‌（Corresponding to Self-Declaration Mode）
-In this operational mode, AI agents dynamically acquire Agent Description (AD) documents from peer agents through standardized discovery protocols（e.g., search engine）. These AD documents serve as structured entry points for targeted crawling operations within Linked Data networks. The crawling mechanism implements selective resource retrieval, encompassing both semantic information and service interfaces，while adhering to ethical crawling policies.（The advantages of this model are detailed in Section 5.1.）
-### 6.2. Centralized Query Mode（Corresponding to Centralized Registration Mode‌）
+
+## 9. Capability Discovery——移动
+
 In the previous chapter, the registration mechanism of AI agents was introduced, which relies on the Agent Registration Server to complete the registration of AI agents in the trusted domain, including their own capabilities, identity information, and other details. The discovery of AI agents also depends on the Agent Registration Server, and the discovery process consists of two phases: "query matching" and "result feedback".
-- 【Query Matching Phase】
-The initiating AI Agent send queries to the registration server, and the server screens and matches the target agents based on the capability database.The query request can be sent via the MQTT Publish protocol, and the request parameters should be structured (to avoid ambiguous descriptions). Examples are as follows:
--- Requirement type: "Medical image analysis"
--- Location range: "Within 1 kilometer of base station BS-001"
--- Real-time requirement: "Latency ≤ 100ms"
--- Security level: "Medical qualification VC is required"
+
+** Query Matching
+The initiating AI Agent A send queries to the registration server, and the server screens and matches the target agents based on the capability database.The query request can be sent via the MQTT Publish protocol, and the request parameters should be structured (to avoid ambiguous descriptions). Examples are as follows:
+
+    Requirement type: "Medical image analysis"
+    Location range: "Within 1 kilometer of base station BS-001"
+    Real-time requirement: "Latency ≤ 100ms"
+    Security level: "Medical qualification VC is required"
+
 The registration server conducts screening according to the following priority order:
--- First priority: Identity validity (whether there is a valid VC)
--- Second priority: Location and real-time performance (whether it is within the specified area and meets the latency requirement)
--- Third priority: Resource redundancy (e.g., agents with a computing power idle rate ≥ 50% are given priority)
+    First priority: Identity validity (whether there is a valid VC)
+    Second priority: Location and real-time performance (whether it is within the specified area and meets the latency requirement)
+    Third priority: Resource redundancy (e.g., agents with a computing power idle rate ≥ 50% are given priority)
+
 After the matching is completed, a "target agent list" is generated, which includes the DID, communication address, and capability matching degree of each agent.
-- 【Result Feedback Phase】
-The registration server feeds back the matched results to the initiator AI agent, and the initiator starts the session establishment based on the results. During this process, the registration server pushes the "target agent list". After receiving the list, the initiator gives priority to select the target agent with the highest matching priority, and makes choices based on the "communication address" and "protocol preference" in the list. For instance, if the target agent has preferences for real-time interaction or non-real-time data synchronization, the sender can select appropriate communication protocols as needed.
 
-## 7. Tasks——华为云核，ANP参与(原第5章）
-### 7.1. Overview
-The core function of a task is to enable the AI agents involved in the communication to agree on "what to do", thereby avoiding collaboration failures due to misunderstandings.
-Tasks can be used in capability discovery and communication procedures:
-- Capability Discovery: Obtaining AI agents with matching capabilities based on the task descriptions.
-- Communication: When a Coordinator Agent initiates a communication request to an Execution Agent, the request message may carry a task description. In addition, other auxiliary information such as images, videos, files, can also be sent along with the task description to help accomplish the task.
+** Result Feedback
+The registration server feeds back the matched results to the initiator AI agent A, and the initiator starts the session establishment based on the results. During this process, the registration server pushes the "target agent list". After receiving the list, the initiator gives priority to select the target agent with the highest matching priority, and makes choices based on the "communication address" and "protocol preference" in the list. For instance, if the target agent has preferences for real-time interaction or non-real-time data synchronization, the sender can select appropriate communication protocols as needed.
 
-An example as shown in Figure 2, a task can be executed by an AI agent (e.g., task0 sent to Agent B). When a complex task is received by an AI agent, this task can be broken down into a series of subtasks (e.g., task0 broken down to sub-task1 and sub-task2) with a clear execution sequence, known as a task chain, and executed by a group of AI agents (e.g., sub-task1 sent to Agent B, sub-task2 sent to Agent C). Task chain allows multiple AI agents to execute different tasks in a specific sequence based on policy, and enable multiple AI agents collaboratively to accomplish a complex task. The Agent communication protocol should support to encapsulate the task chain information, e.g., independent with the underlying network transport (e.g., IP, MPLS).
-+---------+                                  +---------+
-|         |------------send task0----------->|         |
-| Agent A |                                  | Agent B |
-|         |<-task status/result notification-|         |
-+---------+                                  +---------+
-
-+---------+                                  +---------+
-|         |-----------send sub-task1-------->|  Agent  |
-|         |<-task status/result notification-|    B    |
-|         |                                  +---------+
-| Agent A |                                  +---------+
-|         |-----------send sub-task2-------->|  Agent  |
-|         |<-task status/result notification-|    C    |
-+---------+                                  +---------+
-Figure 2: task and sub-task assignment
-
-Tasks can be sent along with the message that establish communication session between AI agents, or separately using the established session between AI agents. In the communication session between AI agents, one or more tasks can be included, which may be independent of each other or associated through context.
-A task is identified by a global unique task ID. The task ID is generated by the agent that creates or assigns the task and are sent along with the task to the agent responsible for executing it.
-### 7.2. Task States
-Based on the length of time to complete the tasks, the task can be categorized into:
-- Short-term tasks: These tasks can be quickly executed and completed, often used for simple tasks such as query the weather.
-- Long-term tasks: These tasks require a longer period of time or involve multi-round interaction or extended waiting periods, such as writing an article. During the execution of long-term tasks, AI agents can synchronize task states or intermediate results among them as needed.
-
-The task states are maintained by the execution AI agent, and the task status can be synchronized among Agents as needed. 
-### 7.3. Task coordination
-The AI Agent communication protocol design **MUST** consider support for Agent Communication Server to facilitate task message forwarding.  Agent Communication Server SHOULD prioritize message scheduling and forwarding based on task requirements to ensure efficient agent collaboration and meet transmission QoS objectives.  
-
-This prioritization scheme ensures that critical messages receive preferential treatment during congestion or resource contention scenarios.
-When delegating tasks to Execution Agents, the Coordinator Agent may include task-relevant contextual about the contact information of the end user, the task itself, the historical preference information known by the Coordinator Agent, and other necessary conversation data, to facilitate the task execution. For example, in trip planning case, this may encompass historically booked flight/hotel preferences or dynamically perceived context like recent user dialog. The AI agent protocol should consequently support context sharing mechanisms through standardized definitions of context types, length constraints, and encoding formats to enhance the effectiveness of task execution.
-
-## 8. Communication mode----华为数通(原第6章）
-This section defines the communication mode of AI agents from two dimensions. One dimension is the number of communication participants, which is divided into Point-to-Point Communication (2 AI agents) and Group Communication (3 or more AI agents), and the section is divided into two sub-sections based on this dimension. The other dimension is whether the communication between AI agents requires the participation of an intermediate node, which divides communication into Direct Communication and Indirect Communication, and this dimension is further elaborated in the classification within each sub-section.
-### 8.1. Point-to-Point Communication
-Direct Communication: AI agents directly send and receive protocol messages without the need for intermediate nodes for processing, or AI agents are unaware of these intermediate nodes.
-Indirect Communication: Communication between AI agents requires processing/relaying by the Agent Communication server, and the AI agent must be aware of and interact with the Agent Communication server. The function of the Agent Communication server includes but is not limited to: 
-- AI agent access control (allowing or blocking an AI agent's messages based on its identity or permissions).
-- Application Layer Proxy (to facilitate monitoring/auditing of AI agent communication behavior, or to hide AI agent identity, etc.).
-- Relay (to forward communication messages, making cross-domain communication easier, etc.).
-- Traffic aggregation (to provide a tree-structured traffic regulation, improving communication efficiency).
-- handle authentication and message relaying between the two communicating parties. 
-### 8.2. Group Communication
-To better accomplish communication collaboration, agents can dynamically form groups. Information sent by an agent within a group can be received simultaneously by other agents in the same group.
-### 8.3. PUB/SUB Communication
-In this mode, the AI agent sending the information does not know which AI agents need to receive it. It first Publishes the information to Agent Communication server, and this Agent Communication server then distributes the information to the subscribing Agents based on their Subscribe status. At the application layer, Pub/Sub is a common and efficient method of information distribution, especially suitable for large-scale group communication scenarios.
-
-## 9. Multimodality----华为2012(原第7章）
-Interactions between AI agents must support multimodality，e.g., text, file, document, image, structured data, real-time audio stream, video streaming. The data size of different multimodality as well as the transmission modes (e.g., real-time steaming, or push notification) may be different.
-Given these traffic characteristics above, the Agent communication protocol should support multimodal data transmission which mentioned above. At the same time, the Agent communication protocol and possible protocols of other layers should be designed with the principle that the multimodal data can be distinguished and aware, based on which they can be handled with differentiated policies for better performance assurance and resource efficiency. For example, different multimodal data can be transmitted with different transport streams of different quality guarantee. Or, they can be transmitted within a same transport stream but with different policies (e.g., transmission priority).
 
 ## 10. Session  management——移动
 建立会话、会话状态、上下文管理
@@ -271,7 +268,6 @@ Therefore, the Agent Communication Server needs to support the status maintenanc
 In order to communicate with Agent D, Agent S initiates a session establishment request to the Agent Communication Server. After verifying its permissions, the Agent Communication Server proceeds to establish the session, for example, by assigning a globally unique Session ID to the new session. This ID will be used throughout the entire session lifecycle to correlate all activities and data. Correspondingly, the Agent Communication Server needs to maintain a session table, which includes information about all Agents involved in the session, especially information about the session initiator.
 ### 10.2 Differentiated QoS Guarantees
 During the session establishment, Agent S can provide the relevant QoS requirements for the session. Consequently, the Agent Communication Server can prioritize the processing and forwarding of messages according to these requirements to ensure the session's QoS.
-
 ## 11. Routing  ----数通
 ### 11.1. Agent ID-based Route look-up
 The scenario described in this section is when an Agent sends a message to another Agent (or a group of Agents), and the sending Agent knows the recipient Agent's ID or Group ID. According to the two major types of communication modes in Section 6, the situations can be classified as follows:
