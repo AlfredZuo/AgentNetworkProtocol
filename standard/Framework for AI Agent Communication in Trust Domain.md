@@ -133,16 +133,11 @@ Leveraging advancements in AI capabilities, the AD document can be entirely desc
 Since different agents may utilize varying models with distinct capabilities, a structured approach is recommended for ensuring consistent and accurate interpretation of the same data across diverse models.
 Structured Format supports multiple document types:
 - JSON (Recommended)
-- JSON-RPC
+- JSON-LD
 - Other structured document formats
 ### 4.2. Agent Information Interaction Mechanism
-The system employs an information interaction mechanism analogous to "web crawlers." Specifically, agents utilize URLs to interconnect externally provided resources (e.g., information, interfaces) through agent description documents, forming a networked ecosystem. Other agents can then operate like crawlers, selectively retrieving appropriate resources to local systems based on the described metadata, where subsequent decision-making and processing occur autonomously.
-Advantages of the Web-Crawler-like Information Interaction Mode：
-- Compatibility with Existing Internet Architecture: Facilitates search engine indexing of agent-publicized information, enabling the creation of an efficient agent data network.
-- Enhanced Privacy Protection: Pulling remote data to local systems for contextual processing mitigates user privacy leakage risks inherent in task-delegation models.
-- Inherent Hierarchical Structure: Supports scalable interactions among a large number of agents.
 Agent description documents include the following two types of resources:
-#### 4.2.1. Informatica
+#### 4.2.1. Information
 Agents may provide the following types of data：
 - Textual files (e.g.： .txt, .csv, .json)
 - Image files (e.g.： .jpg, .png, .svg)
@@ -166,9 +161,17 @@ Security configuration in Agent Description (AD) documents is mandatory. The sec
 To prevent malicious tampering, impersonation, or reuse of Agent Description (AD) documents, a verification mechanism Proof is incorporated into the AD document structure. 
 The definition of Proof shall comply with the specification: [https://www.w3.org/TR/vc-data-integrity/#defn-domain].
 
-## 5. Capability Registration——电信撰写，移动参与(原第8章）
+## 5. Agnet Registration——电信撰写，移动参与(原第8章）,ANP修改
 能力注册流程和关键消息、参数
-The registration procedure for an AI Agent in trust domain can refer to steps (A)-(B) in Figure 1. In trust domain scenario, the AI Agents need to register their attributes to a centralized Agent Registration Server, which can be an Agent, a network function, a third-party server, etc. For example, in 6G core network, the Agent Registration Server can evolve and enhance based on the Network Repository Function (NRF), supporting the registration of the traditional network functions and the network Agents. 
+Agent Registration Includes the Following Two Modes:‌
+### 5.1. Self-Declaration Mode
+In this mode, intelligent agents interconnect externally provided resources (including information, interfaces, etc.) using Linked-Data technologies, forming a networked ecosystem through agent description documents. Other agents can selectively retrieve appropriate resources via metadata described in these agent profile documents.
+Advantages of the Self-Declaration Mode：
+- Compatibility with Existing Internet Architecture: Facilitates search engine indexing of agent-publicized information, enabling the creation of an efficient agent data network.
+- Enhanced Privacy Protection: Pulling remote data to local systems for contextual processing mitigates user privacy leakage risks inherent in task-delegation models.
+- Inherent Hierarchical Structure: Supports scalable interactions among a large number of agents.
+### 5.2. Centralized Registration Mode‌
+In trust domain scenario, the AI Agents need to register their attributes to a centralized Agent Registration Server, which can be an Agent, a network function, a third-party server, etc. For example, in 6G core network, the Agent Registration Server can evolve and enhance based on the Network Repository Function (NRF), supporting the registration of the traditional network functions and the network Agents. 
 The parameters that an Agent needs to register in a trust domain (step A) may include:
 - Name: The name of the Agent, which may not be unique and typically represented as a string.
 - ID: The global unique ID of the Agent configured by the network operator.
@@ -180,31 +183,27 @@ The parameters that an Agent needs to register in a trust domain (step A) may in
 - Skills: A list of detailed description of the skills supported by the Agent. The content of each skill include the name, ID, corresponding services, brief abstract, required input, etc. For example, an Agent deployed in 6G core network support skills named “Policy Control” and “User Location Prediction”. Among these, “Policy Control” corresponds to communication service and requires inputs including user policy-related information; “User Location Prediction” corresponds to AI service and requires inputs including user identification and historical location information.
 - Interfaces: The network interfaces that the agent can provide.
 - Security related information: For example, the licenses, authentication credentials, keys of the Agent.
-Then the Agent Registration Server locally sores the registration information of the Agent. Upon successful registration, the Agent Registration Server returns a registration response to the Agent (step B).
+Then the Agent Registration Server locally sores the registration information of the Agent. Upon successful registration, the Agent Registration Server returns a registration response to the Agent .
 
-
-## 6. Capability Discovery——移动(原第9章）
-
+## 6. Agent Discovery——移动(原第9章），ANP修改
+Agent Discovery Includes the Following Two Modes:‌ (Corresponding to Agent Registration)‌
+### 6.1. Proactive Discovery Mode‌（Corresponding to Self-Declaration Mode）
+In this operational mode, AI agents dynamically acquire Agent Description (AD) documents from peer agents through standardized discovery protocols（e.g., search engine）. These AD documents serve as structured entry points for targeted crawling operations within Linked Data networks. The crawling mechanism implements selective resource retrieval, encompassing both semantic information and service interfaces，while adhering to ethical crawling policies.（The advantages of this model are detailed in Section 5.1.）
+### 6.2. Centralized Query Mode（Corresponding to Centralized Registration Mode‌）
 In the previous chapter, the registration mechanism of AI agents was introduced, which relies on the Agent Registration Server to complete the registration of AI agents in the trusted domain, including their own capabilities, identity information, and other details. The discovery of AI agents also depends on the Agent Registration Server, and the discovery process consists of two phases: "query matching" and "result feedback".
-
-** Query Matching
-The initiating AI Agent A send queries to the registration server, and the server screens and matches the target agents based on the capability database.The query request can be sent via the MQTT Publish protocol, and the request parameters should be structured (to avoid ambiguous descriptions). Examples are as follows:
-
-    Requirement type: "Medical image analysis"
-    Location range: "Within 1 kilometer of base station BS-001"
-    Real-time requirement: "Latency ≤ 100ms"
-    Security level: "Medical qualification VC is required"
-
+- 【Query Matching Phase】
+The initiating AI Agent send queries to the registration server, and the server screens and matches the target agents based on the capability database.The query request can be sent via the MQTT Publish protocol, and the request parameters should be structured (to avoid ambiguous descriptions). Examples are as follows:
+-- Requirement type: "Medical image analysis"
+-- Location range: "Within 1 kilometer of base station BS-001"
+-- Real-time requirement: "Latency ≤ 100ms"
+-- Security level: "Medical qualification VC is required"
 The registration server conducts screening according to the following priority order:
-    First priority: Identity validity (whether there is a valid VC)
-    Second priority: Location and real-time performance (whether it is within the specified area and meets the latency requirement)
-    Third priority: Resource redundancy (e.g., agents with a computing power idle rate ≥ 50% are given priority)
-
+-- First priority: Identity validity (whether there is a valid VC)
+-- Second priority: Location and real-time performance (whether it is within the specified area and meets the latency requirement)
+-- Third priority: Resource redundancy (e.g., agents with a computing power idle rate ≥ 50% are given priority)
 After the matching is completed, a "target agent list" is generated, which includes the DID, communication address, and capability matching degree of each agent.
-
-** Result Feedback
-The registration server feeds back the matched results to the initiator AI agent A, and the initiator starts the session establishment based on the results. During this process, the registration server pushes the "target agent list". After receiving the list, the initiator gives priority to select the target agent with the highest matching priority, and makes choices based on the "communication address" and "protocol preference" in the list. For instance, if the target agent has preferences for real-time interaction or non-real-time data synchronization, the sender can select appropriate communication protocols as needed.
-
+- 【Result Feedback Phase】
+The registration server feeds back the matched results to the initiator AI agent, and the initiator starts the session establishment based on the results. During this process, the registration server pushes the "target agent list". After receiving the list, the initiator gives priority to select the target agent with the highest matching priority, and makes choices based on the "communication address" and "protocol preference" in the list. For instance, if the target agent has preferences for real-time interaction or non-real-time data synchronization, the sender can select appropriate communication protocols as needed.
 
 ## 7. Tasks——华为云核，ANP参与(原第5章）
 ### 7.1. Overview
