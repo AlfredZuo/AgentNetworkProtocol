@@ -161,7 +161,7 @@ Security configuration in Agent Description (AD) documents is mandatory. The sec
 To prevent malicious tampering, impersonation, or reuse of Agent Description (AD) documents, a verification mechanism Proof is incorporated into the AD document structure. 
 The definition of Proof shall comply with the specification: [https://www.w3.org/TR/vc-data-integrity/#defn-domain].
 
-## 5. Agnet Registration——电信撰写，移动参与(原第8章）,ANP修改
+## 5. Agent Registration——电信撰写，移动参与(原第8章）,ANP修改
 能力注册流程和关键消息、参数
 Agent Registration Includes the Following Two Modes:‌
 ### 5.1. Self-Declaration Mode
