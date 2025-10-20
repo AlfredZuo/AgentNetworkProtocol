@@ -65,7 +65,9 @@ A.2.1.1.1.1. <H5>	10
 ## 1. Overview  ——华为、移动
 
 With the development of AI agent technology, its application scenarios have been continuously expanding. From initial simple task execution to complex collaborative tasks among multiple agents, agents have demonstrated great potential in various fields. This multi-agent collaboration model can fully leverage the strengths of individual agents, improving the quality and efficiency of task execution. However, as the demand for multi-agent collaboration grows, defining standardized communication protocols among agents to achieve wide-area interconnection, cross-domain interoperability, and secure collaboration has become an urgent issue to address.
+
 To meet the communication needs of AI agents and promote the widespread services of multi-agent collaboration[1], it is imperative to define standardized agent communication protocols that support interconnection, interoperability, and secure scalability between agents in trust domain.
+
 In this draft we propose to use Agent Network Protocol (ANP) as a baseline for further description.
 
 ### 1.1. Scope
@@ -73,6 +75,7 @@ From the perspective of network service domain division, future agents can be si
 1. Communication between different terminal-side agents registered in the same network service domain.
 2. Communication between terminal-side agents and network-side agents registered in the same network service domain.
 3. Communication between network-side agents registered in the same network service domain.
+
 Furthermore, the communication between agents registered in different network domains is not within the scope of this discussion.
 
 ## 2. Terms and Definitions
@@ -285,31 +288,22 @@ The scenario described in this section is when an Agent sends a message to anoth
 ### 12.2. Semantic-based Route resolution
 The scenario described in this section is when an Agent wants to communicate with other Agents that possess a certain capability or attribute, but does not yet know their IDs. In this case, a semantic search system is needed to search for the Agent IDs that meet the criteria based on the capabilities or attributes described by the Agent. The message is then routed according to the retrieved ID.
 
-## 13. Lower layer considerations
-### 13.1. Application layer----华为云核
+## 13. Protocol Stack Considerations
+The protocol stack of an AI agent is divided into three functional layers: the AI Agent communication protocol layer, the application layer, and the transmission layer. AI Agent applications communicate with each other through the interfaces provided by the AI Agent communication protocol layer. The AI Agent communication protocol operates above the application layer and has requirements for both the application layer and transport layer protocols.
+
+<img width="1361" height="573" alt="image" src="https://github.com/user-attachments/assets/9efeb9b7-e3e4-4b23-836d-b0f26a86b364" />
+Figure 3: AI Agent protocol stack Layer
+
 The application layer protocol stack shall meet the following requirements:
 - Support bidirectional full-duplex communication between AI agents, meaning that an AI agent can both initiate and receive communication requests. In the same communication session, an Agent can send multimodal data as well as receive multimodal data.
 - Be decoupled from the presentation layer. For example, after the presentation layer chooses to use JSON-RPC protocol, JSON-RPC messages MUST support being carried over different application layer protocols such as HTTP and WebTransport, etc.
 - Support a flexible routing mechanism at the application layer, including direct routing based on URL querying DNS and segment-based routing according to DID.
 - Support a flexible extension mechanism for protocols to better meet the increasingly diverse functional requirements of Agent communication.
-### 13.2. Transmission layer——联通
-传输层协议栈（支持QoS差异化、支持多模数据分流或者流复用，移动性保证）
-Transport layer protocols such as QUIC, TCP, and UDP should be used or enhanced to support agent session management and routing mechanisms. 
+
+Transmission Layer: This layer SHALL provide the following functions:
 - In mobile scenarios, transport layer should dynamically optimize and update QoS parameters according to revised QoS rules.
 - To achieve multimodal data offloading and data stream multiplexing, multi-path transmission capabilities (i.e., MPTCP, MPQUIC) should be adopted to support flexible transmission management of multi-source data from agents. 
 - the transport layer should either transmit unfinished data packets to the new link or switch data to a backup link, thereby enabling mobility management for agent communication.
-
-![Protocol Flow](./pic/Section12.2.png)
-
-   +------------------------------------------+
-   |     Agent communication protocol         |
-   +------------------------------------------+
-   |                Application layer         | 
-   +------------------------------------------+  
-   |               Transmission layer         |
-   +------------------------------------------+
-
-Figure 3: Protocol Stack
 
 ## 14. Formal Syntax
 The following syntax specification uses the augmented Backus-Naur Form (BNF) as described in RFC-2234 [RFC2234].
