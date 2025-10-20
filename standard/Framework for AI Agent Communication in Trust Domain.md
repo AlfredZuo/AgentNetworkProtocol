@@ -147,11 +147,11 @@ Agents may provide the following types of data：
 #### 4.2.2. Interface
 Agent interfaces are categorized into two types:
 - Natural Language Interface
--- Enables agents to deliver personalized services through natural language interaction.
--- Supports human-like communication and adaptive responses.
+	- Enables agents to deliver personalized services through natural language interaction.
+	- Supports human-like communication and adaptive responses.
 - Structured Interface
--- Facilitates efficient and standardized service delivery via predefined protocols.
--- Ensures interoperability and machine-to-machine automation.
+	- Facilitates efficient and standardized service delivery via predefined protocols.
+	- Ensures interoperability and machine-to-machine automation.
 ### 4.3. Security Mechanism
 Security configuration in Agent Description (AD) documents is mandatory. The security definition must be activated through the security member at the agent level. This configuration constitutes the required security mechanism for agent interactions.
 - Global Scope: When security is declared at the root level of an AD document, all resources within the document must enforce this security mechanism for access.
@@ -286,7 +286,7 @@ The scenario described in this section is when an Agent sends a message to anoth
 ### 11.2. Semantic-based Route resolution
 The scenario described in this section is when an Agent wants to communicate with other Agents that possess a certain capability or attribute, but does not yet know their IDs. In this case, a semantic search system is needed to search for the Agent IDs that meet the criteria based on the capabilities or attributes described by the Agent. The message is then routed according to the retrieved ID.
 
-## 12. Protocol Properties
+## 12. Lower layer considerations
 ### 12.1. Application layer----华为云核
 The application layer protocol stack shall meet the following requirements:
 - Support bidirectional full-duplex communication between AI agents, meaning that an AI agent can both initiate and receive communication requests. In the same communication session, an Agent can send multimodal data as well as receive multimodal data.
@@ -296,10 +296,11 @@ The application layer protocol stack shall meet the following requirements:
 ### 12.2. Transmission layer——联通
 传输层协议栈（支持QoS差异化、支持多模数据分流或者流复用，移动性保证）
 Transport layer protocols such as QUIC, TCP, and UDP should be used or enhanced to support agent session management and routing mechanisms. 
+-In mobile scenarios, transport layer should dynamically optimize and update QoS parameters according to revised QoS rules.
+-To achieve multimodal data offloading and data stream multiplexing, multi-path transmission capabilities (i.e., MPTCP, MPQUIC) should be adopted to support flexible transmission management of multi-source data from agents. 
+-the transport layer should either transmit unfinished data packets to the new link or switch data to a backup link, thereby enabling mobility management for agent communication.
 
-	-In mobile scenarios, transport layer should dynamically optimize and update QoS parameters according to revised QoS rules.
-	-To achieve multimodal data offloading and data stream multiplexing, multi-path transmission capabilities (i.e., MPTCP, MPQUIC) should be adopted to support flexible transmission management of multi-source data from agents. 
-	-the transport layer should either transmit unfinished data packets to the new link or switch data to a backup link, thereby enabling mobility management for agent communication.
+![Protocol Flow](./pic/Section12.2.png)
 
    +------------------------------------------+
    |     Agent communication protocol         |
