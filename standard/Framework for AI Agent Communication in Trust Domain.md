@@ -125,7 +125,7 @@ In order to fulfill the requirements mentioned above, we suggest to introduce th
 - DID: The core DID specification does not require implementers to use specific computational infrastructure to build decentralized identifiers, allowing us to fully leverage existing mature technologies and well-established network infrastructure to build DIDs.
 - VC: The VC can be used as container of attributes of an AI agent. The attributes of an AI agent may come from different sources which can be verified by the VC. This will help increase the interoperability of cross-domain communications.
 
-## 5. Agent Description——ANP撰写
+## 5. Agent Description
 Agent Description (AD) exists in document form. The AD document serves as the entry point to access an agent, functioning similarly to a website homepage. Other agents can obtain information such as the agent's name, affiliated entity, functionalities, products, services, and interaction APIs or protocols from this AD document. With this information, data communication and collaboration between agents can be achieved.
 ### 5.1. Agent Description Document Format
 The Agent Description (AD) document serves as the external entry point for an agent and can be provided in either of the following formats:
@@ -163,7 +163,7 @@ Security configuration in Agent Description (AD) documents is mandatory. The sec
 To prevent malicious tampering, impersonation, or reuse of Agent Description (AD) documents, a verification mechanism Proof is incorporated into the AD document structure. 
 The definition of Proof shall comply with the specification: [https://www.w3.org/TR/vc-data-integrity/#defn-domain].
 
-## 6. Agent Registration——电信撰写，移动参与(原第8章）,ANP修改
+## 6. Agent Registration
 能力注册流程和关键消息、参数
 Agent Registration Includes the Following Two Modes:‌
 ### 6.1. Self-Declaration Mode
@@ -187,7 +187,7 @@ The parameters that an Agent needs to register in a trust domain (step A) may in
 - Security related information: For example, the licenses, authentication credentials, keys of the Agent.
 Then the Agent Registration Server locally sores the registration information of the Agent. Upon successful registration, the Agent Registration Server returns a registration response to the Agent. Depending on the deployment of the Agent (e.g. terminal-side Agents, network-side Agents, Agents outside the network, etc.), the parameters included in the registration may vary. Specific registration parameters need to be refined ion subsequent discussions.
 
-## 7. Agent Discovery——移动(原第9章），ANP修改
+## 7. Agent Discovery
 Agent Discovery Includes the Following Two Modes:‌ (Corresponding to Agent Registration)‌
 ### 7.1. Proactive Discovery Mode‌（Corresponding to Self-Declaration Mode）
 In this operational mode, AI agents dynamically acquire Agent Description (AD) documents from peer agents through standardized discovery protocols（e.g., search engine）. These AD documents serve as structured entry points for targeted crawling operations within Linked Data networks. The crawling mechanism implements selective resource retrieval, encompassing both semantic information and service interfaces，while adhering to ethical crawling policies.（The advantages of this model are detailed in Section 5.1.）
@@ -207,7 +207,7 @@ After the matching is completed, a "target agent list" is generated, which inclu
 - 【Result Feedback Phase】
 The registration server feeds back the matched results to the initiator AI agent, and the initiator starts the session establishment based on the results. During this process, the registration server pushes the "target agent list". After receiving the list, the initiator gives priority to select the target agent with the highest matching priority, and makes choices based on the "communication address" and "protocol preference" in the list. For instance, if the target agent has preferences for real-time interaction or non-real-time data synchronization, the sender can select appropriate communication protocols as needed.
 
-## 8. Tasks——华为云核，ANP参与(原第5章）
+## 8. Tasks
 ### 8.1. Overview
 The core function of a task is to enable the AI agents involved in the communication to agree on "what to do", thereby avoiding collaboration failures due to misunderstandings.
 Tasks can be used in capability discovery and communication procedures:
@@ -248,7 +248,7 @@ The AI Agent communication protocol design **MUST** consider support for Agent C
 This prioritization scheme ensures that critical messages receive preferential treatment during congestion or resource contention scenarios.
 When delegating tasks to Execution Agents, the Coordinator Agent may include task-relevant contextual about the contact information of the end user, the task itself, the historical preference information known by the Coordinator Agent, and other necessary conversation data, to facilitate the task execution. For example, in trip planning case, this may encompass historically booked flight/hotel preferences or dynamically perceived context like recent user dialog. The AI agent protocol should consequently support context sharing mechanisms through standardized definitions of context types, length constraints, and encoding formats to enhance the effectiveness of task execution.
 
-## 9. Communication mode----华为数通(原第6章）
+## 9. Communication mode
 This section defines the communication mode of AI agents from two dimensions. One dimension is the number of communication participants, which is divided into Point-to-Point Communication (2 AI agents) and Group Communication (3 or more AI agents), and the section is divided into two sub-sections based on this dimension. The other dimension is whether the communication between AI agents requires the participation of an intermediate node, which divides communication into Direct Communication and Indirect Communication, and this dimension is further elaborated in the classification within each sub-section.
 ### 9.1. Point-to-Point Communication
 Direct Communication: AI agents directly send and receive protocol messages without the need for intermediate nodes for processing, or AI agents are unaware of these intermediate nodes.
@@ -263,11 +263,11 @@ To better accomplish communication collaboration, agents can dynamically form gr
 ### 9.3. PUB/SUB Communication
 In this mode, the AI agent sending the information does not know which AI agents need to receive it. It first Publishes the information to Agent Communication server, and this Agent Communication server then distributes the information to the subscribing Agents based on their Subscribe status. At the application layer, Pub/Sub is a common and efficient method of information distribution, especially suitable for large-scale group communication scenarios.
 
-## 10. Multimodality----华为2012(原第7章）
+## 10. Multimodality
 Interactions between AI agents must support multimodality，e.g., text, file, document, image, structured data, real-time audio stream, video streaming. The data size of different multimodality as well as the transmission modes (e.g., real-time steaming, or push notification) may be different.
 Given these traffic characteristics above, the Agent communication protocol should support multimodal data transmission which mentioned above. At the same time, the Agent communication protocol and possible protocols of other layers should be designed with the principle that the multimodal data can be distinguished and aware, based on which they can be handled with differentiated policies for better performance assurance and resource efficiency. For example, different multimodal data can be transmitted with different transport streams of different quality guarantee. Or, they can be transmitted within a same transport stream but with different policies (e.g., transmission priority).
 
-## 11. Session  management——移动
+## 11. Session management
 After discovering the peer Agent (e.g., Agent D), the local Agent (e.g., Agent S) needs to establish a session with it to communicate. After the task is completed. the relevant session resources can be released.
 
 Therefore, the session management takes place after the local Agent receives the task and finds the participants. According to the task requirements, the session management entity needs to decide which communication mode is applied for the task. According to the number of communication participants, the session management entity needs to support Point-to-Point communication and Group Communication. Meanwhile, the session management entity needs to support both the Direct Communication and the Indirect Communication.
@@ -286,7 +286,7 @@ Alternately, after authentication and authorization, the  Agent S can also initi
 ### 11.2 Differentiated QoS Guarantees
 During the session establishment, Agent S can provide the relevant QoS requirements for the session. Consequently, the Agent Communication Server can prioritize the processing and forwarding of messages according to these requirements to ensure the session's QoS.
 
-## 12. Routing  ----数通
+## 12. Routing
 ### 12.1. Agent ID-based Route look-up
 The scenario described in this section is when an Agent sends a message to another Agent (or a group of Agents), and the sending Agent knows the recipient Agent's ID or Group ID. According to the two major types of communication modes in Section 6, the situations can be classified as follows:
 - Point-to-Point Communication (P2P):
@@ -318,7 +318,7 @@ Transmission Layer: This layer SHALL provide the following functions:
 The following syntax specification uses the augmented Backus-Naur Form (BNF) as described in RFC-2234 [RFC2234].
 <Define your formal syntax here.>
 
-## 15. Security Considerations----华为云核
+## 15. Security Considerations
 Security of AI agent communication is not detailed in this draft. Considering its independence, we suggest that it could be discussed separately through other proposals from the following aspects:
 - Identity: AI agents vary from embodied robots to virtualized assistant, which introduces different identity and credential storage approach. The protocol should consider a unified and compatibility mechanism to meet these requirements, e.g., SIM-based robots, certificate-based AI assistant.
 - Authentication: AI agents can reuse the authentication mechanism provided by the single trusted domain e.g., primary authentication between the agent and the core network. So that the agents may simplify the direct authentication process.
@@ -331,7 +331,7 @@ Security of AI agent communication is not detailed in this draft. Considering it
 ## 16. IANA Considerations
 <Add any IANA considerations>
 
-## 17. Conclusions-----华为云核
+## 17. Conclusions
 This framework focuses on AI agent communication within a single trust domain, introducing the communication framework, basic processes, and key mechanisms.
 Considering that multiple trust domains may exist in practical deployments, the mechanisms such as digital identity format, capability registration and discovery, and routing involved in cross-domain scenarios may differ from those within a single trust domain. Therefore, further research on cross-domain agent communication is needed in the future.
 
