@@ -296,9 +296,9 @@ The application layer protocol stack shall meet the following requirements:
 ### 12.2. Transmission layer——联通
 传输层协议栈（支持QoS差异化、支持多模数据分流或者流复用，移动性保证）
 Transport layer protocols such as QUIC, TCP, and UDP should be used or enhanced to support agent session management and routing mechanisms. 
--In mobile scenarios, transport layer should dynamically optimize and update QoS parameters according to revised QoS rules.
--To achieve multimodal data offloading and data stream multiplexing, multi-path transmission capabilities (i.e., MPTCP, MPQUIC) should be adopted to support flexible transmission management of multi-source data from agents. 
--the transport layer should either transmit unfinished data packets to the new link or switch data to a backup link, thereby enabling mobility management for agent communication.
+- In mobile scenarios, transport layer should dynamically optimize and update QoS parameters according to revised QoS rules.
+- To achieve multimodal data offloading and data stream multiplexing, multi-path transmission capabilities (i.e., MPTCP, MPQUIC) should be adopted to support flexible transmission management of multi-source data from agents. 
+- the transport layer should either transmit unfinished data packets to the new link or switch data to a backup link, thereby enabling mobility management for agent communication.
 
 ![Protocol Flow](./pic/Section12.2.png)
 
@@ -310,7 +310,7 @@ Transport layer protocols such as QUIC, TCP, and UDP should be used or enhanced 
    |               Transmission layer         |
    +------------------------------------------+
 
-         Figure x: Protocol Stack
+Figure 3: Protocol Stack
 
 ## 13. Formal Syntax
 The following syntax specification uses the augmented Backus-Naur Form (BNF) as described in RFC-2234 [RFC2234].
