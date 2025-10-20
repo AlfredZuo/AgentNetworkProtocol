@@ -171,7 +171,7 @@ Advantages of the Self-Declaration Mode：
 - Enhanced Privacy Protection: Pulling remote data to local systems for contextual processing mitigates user privacy leakage risks inherent in task-delegation models.
 - Inherent Hierarchical Structure: Supports scalable interactions among a large number of agents.
 ### 5.2. Centralized Registration Mode‌
-In trust domain scenario, the AI Agents need to register their attributes to a centralized Agent Registration Server, which can be an Agent, a network function, a third-party server, etc. For example, in 6G core network, the Agent Registration Server can evolve and enhance based on the Network Repository Function (NRF), supporting the registration of the traditional network functions and the network Agents. 
+In this registration mode, the AI Agents register their attributes to a centralized Agent Registration Server, which can be an Agent, a network function, a third-party server, etc. For example, in 6G core network, the Agent Registration Server can evolve and enhance based on the Network Repository Function (NRF), supporting the registration of the traditional network functions and the network Agents. 
 The parameters that an Agent needs to register in a trust domain (step A) may include:
 - Name: The name of the Agent, which may not be unique and typically represented as a string.
 - ID: The global unique ID of the Agent configured by the network operator.
@@ -183,7 +183,7 @@ The parameters that an Agent needs to register in a trust domain (step A) may in
 - Skills: A list of detailed description of the skills supported by the Agent. The content of each skill include the name, ID, corresponding services, brief abstract, required input, etc. For example, an Agent deployed in 6G core network support skills named “Policy Control” and “User Location Prediction”. Among these, “Policy Control” corresponds to communication service and requires inputs including user policy-related information; “User Location Prediction” corresponds to AI service and requires inputs including user identification and historical location information.
 - Interfaces: The network interfaces that the agent can provide.
 - Security related information: For example, the licenses, authentication credentials, keys of the Agent.
-Then the Agent Registration Server locally sores the registration information of the Agent. Upon successful registration, the Agent Registration Server returns a registration response to the Agent .
+Then the Agent Registration Server locally sores the registration information of the Agent. Upon successful registration, the Agent Registration Server returns a registration response to the Agent. Depending on the deployment of the Agent (e.g. terminal-side Agents, network-side Agents, Agents outside the network, etc.), the parameters included in the registration may vary. Specific registration parameters need to be refined ion subsequent discussions.
 
 ## 6. Agent Discovery——移动(原第9章），ANP修改
 Agent Discovery Includes the Following Two Modes:‌ (Corresponding to Agent Registration)‌
