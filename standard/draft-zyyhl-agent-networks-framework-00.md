@@ -53,6 +53,10 @@ normative:
 
 
 informative:
+  ANP:
+    title: Agent Network Protocol 1.0
+    date: 2024-04-15
+    target: https://github.com/agent-network-protocol/AgentNetworkProtocol
   I-D.stephan-ai-agent-6g:
   VC Card:
     title: Verifiable Credential Data Integrity 1.0
@@ -62,7 +66,7 @@ informative:
 
 --- abstract
 
-This document defines the framework of AI agent networks based on Agent Network Protocol (ANP) protocol. It provides the basic functions that needs to support AI agent communication in the AI agent networks within the trust domain.
+This document defines the framework of AI agent networks based on Agent Network Protocol (ANP) protocol. {{ANP}} It provides the basic functions that needs to support AI agent communication in the AI agent networks within the trust domain.
 
 --- middle
 
@@ -213,9 +217,9 @@ Leveraging advancements in AI capabilities, the AD document can be entirely desc
 
 Since different agents may utilize varying models with distinct capabilities, a structured approach is recommended for ensuring consistent and accurate interpretation of the same data across diverse models. Structured Format supports multiple document types:
 
-- JSON-LD
+- JSON
 
-- JSON-RPC
+- JSON-LD
 
 - Other structured document formats
 
