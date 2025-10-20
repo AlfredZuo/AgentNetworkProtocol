@@ -268,12 +268,21 @@ Interactions between AI agents must support multimodality，e.g., text, file, do
 Given these traffic characteristics above, the Agent communication protocol should support multimodal data transmission which mentioned above. At the same time, the Agent communication protocol and possible protocols of other layers should be designed with the principle that the multimodal data can be distinguished and aware, based on which they can be handled with differentiated policies for better performance assurance and resource efficiency. For example, different multimodal data can be transmitted with different transport streams of different quality guarantee. Or, they can be transmitted within a same transport stream but with different policies (e.g., transmission priority).
 
 ## 11. Session  management——移动
-建立会话、会话状态、上下文管理
 After discovering the peer Agent (e.g., Agent D), the local Agent (e.g., Agent S) needs to establish a session with it to communicate. After the task is completed. the relevant session resources can be released.
+
+Therefore, the session management takes place after the local Agent receives the task and finds the participants. According to the task requirements, the session management entity needs to decide which communication mode is applied for the task. According to the number of communication participants, the session management entity needs to support Point-to-Point communication and Group Communication. Meanwhile, the session management entity needs to support both the Direct Communication and the Indirect Communication.
+
+In this section, we use a scenario containing two Agents as an example. If more agents are needed for the task, they can join in the task group, and the Agent Communication Server should support multicast among them.
+
 ### 11.1 Session Establishment and Control
 Before communicating with Agent D, Agent S should first establish a secure connection with the Agent Communication Server. Prior to this, Agent S must undergo authentication by the Agent Communication Server. Similarly, Agent D also needs to be authenticated by the Agent Communication Server to establish a secure connection.
+
 Therefore, the Agent Communication Server needs to support the status maintenance of the attached Agents, such as the status of Agent S and Agent D. In other words, there should be an Agent status table on the Agent Communication Server, and the table should include information about Agent ID, Agent IP, etc.
+
 In order to communicate with Agent D, Agent S initiates a session establishment request to the Agent Communication Server. After verifying its permissions, the Agent Communication Server proceeds to establish the session, for example, by assigning a globally unique Session ID to the new session. This ID will be used throughout the entire session lifecycle to correlate all activities and data. Correspondingly, the Agent Communication Server needs to maintain a session table, which includes information about all Agents involved in the session, especially information about the session initiator.
+
+Alternately, after authentication and authorization, the  Agent S can also initial a connection directly to the Agent D. In this situation, the control plane and data plane can be separated.
+
 ### 11.2 Differentiated QoS Guarantees
 During the session establishment, Agent S can provide the relevant QoS requirements for the session. Consequently, the Agent Communication Server can prioritize the processing and forwarding of messages according to these requirements to ensure the session's QoS.
 
