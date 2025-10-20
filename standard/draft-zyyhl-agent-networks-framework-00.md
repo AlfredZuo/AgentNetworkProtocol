@@ -58,6 +58,10 @@ informative:
     title: Verifiable Credential Data Integrity 1.0
     date: 2025-05-15
     target: https://www.w3.org/TR/vc-data-integrity/#defn-domain
+  DID:
+    title: Decentralized Identifiers v1.1
+    date: 2025-09-18
+    target: https://www.w3.org/TR/did-1.1/
   
 
 --- abstract
@@ -190,7 +194,7 @@ The digital identity mechanism is used for the registration, discovery and commu
 
 - Authorization: compared to human communication, AI agent communication needs to be explicitly authorized at all time. The attribute-based authorization mechanism can support both direct agent-agent authorization and delegated authorization, even for the user authorization.
 
-In order to fulfill the requirements mentioned above, it is suggested to introduce the W3C Decentralized Identifier (DID) and Verifiable Credential (VC) standards as the basic digital identity components.
+In order to fulfill the requirements mentioned above, it is suggested to introduce the W3C Decentralized Identifier (DID){{DID}} and Verifiable Credential (VC) {{VC Card}}standards as the basic digital identity components.
 
 - DID: The core DID specification does not require implementers to use specific computational infrastructure to build decentralized identifiers, allowing us to fully leverage existing mature technologies and well-established network infrastructure to build DIDs.
 
@@ -434,6 +438,8 @@ Before communicating with Agent B, Agent A should first establish a secure conne
 Therefore, the Agent Communication Server needs to support the states maintenance of the registered Agents, such as the states of Agent A and Agent B.
 
 In order to communicate with Agent B, Agent A initiates a session establishment request to the Agent Communication Server. After verifying its permissions, the Agent Communication Server proceeds to establish the session, for example, by assigning a globally unique Session ID to the new session. This ID will be used throughout the entire session lifecycle to correlate all activities and data. Correspondingly, the Agent Communication Server needs to maintain a session table, which includes information about all Agents involved in the session, especially information about the session initiator.
+
+Alternately, after authentication and authorization, the  Agent A can also initial a connection directly to the Agent B. In this situation, the control plane and data plane can be separated.
 
 ## Differentiated QoS Guarantees
 
